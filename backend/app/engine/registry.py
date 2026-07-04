@@ -9,7 +9,7 @@ from app.engine.executors.http_executor import HttpExecutor
 from app.engine.executors.return_executor import ReturnExecutor
 from app.engine.executors.transform import TransformExecutor
 from app.engine.executors.validation import ValidationExecutor
-
+from app.engine.executors.condition import ConditionExecutor
 
 class ExecutorRegistry:
     """
@@ -20,11 +20,15 @@ class ExecutorRegistry:
         self._executors: dict[str, BaseExecutor] = {}
         self._register_defaults()
 
-    def _register_defaults(self) -> None:
+    def _register_defaults(self):
+
      self.register(ValidationExecutor())
      self.register(TransformExecutor())
      self.register(HttpExecutor())
      self.register(ReturnExecutor())
+     self.register(ConditionExecutor())
+
+     print(self.available())
 
     def register(
         self,

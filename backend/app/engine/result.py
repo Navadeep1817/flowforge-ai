@@ -1,5 +1,5 @@
 """
-Workflow execution result models.
+Workflow execution result.
 """
 
 from __future__ import annotations
@@ -11,18 +11,25 @@ from typing import Any
 @dataclass(slots=True)
 class ExecutionResult:
     """
-    Result returned by every workflow node execution.
+    Result produced by a workflow node execution.
     """
 
+    # Whether execution succeeded
     success: bool = True
 
+    # Data produced by the node
     outputs: dict[str, Any] = field(default_factory=dict)
 
-    # Supports sequential, conditional, and parallel execution
-    next_nodes: list[str] = field(default_factory=list)
-
+    # Whether the workflow should stop immediately
     terminate: bool = False
 
-    warnings: list[str] = field(default_factory=list)
-
+    # Error message (if any)
     error: str | None = None
+
+    # Branch selected by control-flow nodes
+    # Examples:
+    # "true"
+    # "false"
+    # "success"
+    # "failure"
+    branch: str | None = None

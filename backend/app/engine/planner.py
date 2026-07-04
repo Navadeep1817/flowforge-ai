@@ -1,7 +1,8 @@
 """
 Workflow planner.
 
-Responsible for determining the next node(s) to execute.
+Determines the next node to execute based on the current node
+and the execution result.
 """
 
 from __future__ import annotations
@@ -15,10 +16,30 @@ class WorkflowPlanner:
     Determines workflow execution order.
     """
 
-    def get_start_node(self, workflow: Workflow) -> WorkflowNode:
+    def get_start_node(
+        self,
+        workflow: Workflow,
+    ) -> WorkflowNode:
         """
-        Return the workflow's starting node.
+        Return the workflow's start node.
         """
+        return workflow.nodes[workflow.start_node]
+
+   
+
+from app.engine.result import ExecutionResult
+from app.engine.workflow import Workflow, WorkflowNode
+
+
+class WorkflowPlanner:
+    """
+    Determines workflow execution order.
+    """
+
+    def get_start_node(
+        self,
+        workflow: Workflow,
+    ) -> WorkflowNode:
         return workflow.nodes[workflow.start_node]
 
     def get_next_node(
@@ -27,16 +48,24 @@ class WorkflowPlanner:
         current: WorkflowNode,
         result: ExecutionResult,
     ) -> WorkflowNode | None:
-        """
-        Determine the next node to execute.
-        """
 
-        # Node explicitly chose the next node
-        if result.next_nodes:
-            return workflow.nodes[result.next_nodes[0]]
+        # No next node
+        if not current.next_nodes:
+            return None
 
-        # Follow workflow graph
-        if current.next_nodes:
-            return workflow.nodes[current.next_nodes[0]]
+        # Branching node (Condition)
+        if isinstance(current.next_nodes, dict):
 
-        return None
+            next_node_id = current.next_nodes.get(result.branch)
+
+            if next_node_id is None:
+                raise ValueError(
+                    f"No branch '{result.branch}' defined for node '{current.id}'."
+                )
+
+            return workflow.nodes[next_node_id]
+
+        # Sequential node
+        next_node_id = current.next_nodes[0]
+
+        return workflow.nodes[next_node_id]

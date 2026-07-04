@@ -4,16 +4,16 @@ Workflow API schemas.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Union
 
 from pydantic import BaseModel, Field
-
+from typing import Union
 
 class WorkflowNodeSchema(BaseModel):
     id: str
     type: str
-    config: dict[str, Any] = Field(default_factory=dict)
-    next_nodes: list[str] = Field(default_factory=list)
+    config: dict = {}
+    next_nodes: Union[list[str], dict[str, str]]
 
 
 class WorkflowSchema(BaseModel):

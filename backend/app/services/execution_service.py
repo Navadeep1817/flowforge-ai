@@ -45,11 +45,11 @@ class ExecutionService:
             start_node=payload.workflow.start_node,
             nodes={
                 node_id: WorkflowNode(
-                    id=node.id,
-                    type=node.type,
-                    config=node.config,
-                    next_nodes=node.next_nodes,
-                )
+    id=node.id,
+    type=node.type,
+    config=node.config,
+    next_nodes=node.next_nodes,
+)
                 for node_id, node in payload.workflow.nodes.items()
             },
         )

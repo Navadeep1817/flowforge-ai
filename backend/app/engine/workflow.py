@@ -6,24 +6,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass(slots=True)
+@dataclass
 class WorkflowNode:
-    """
-    Represents a node in a workflow graph.
-    """
-
     id: str
-
     type: str
-
-    config: dict[str, Any] = field(default_factory=dict)
-
-    # Outgoing edges in the workflow graph
-    next_nodes: list[str] = field(default_factory=list)
-
-
+    config: dict
+    next_nodes: Any
 @dataclass(slots=True)
 class Workflow:
     """
