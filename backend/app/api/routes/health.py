@@ -29,3 +29,17 @@ async def health_check() -> ApiResponse:
             "status": "healthy",
         },
     ) 
+@router.get("/", response_model=ApiResponse)
+async def root() -> ApiResponse:
+    """
+    Root endpoint.
+    """
+
+    return ApiResponse(
+        success=True,
+        data={
+            "name": settings.APP_NAME,
+            "version": settings.APP_VERSION,
+            "docs": "/docs",
+        },
+    )
