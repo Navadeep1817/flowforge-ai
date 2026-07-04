@@ -1,25 +1,22 @@
 """
-Return node.
+Return executor.
 """
 
 from __future__ import annotations
 
-from typing import ClassVar
-
 from app.engine.context import ExecutionContext
-from app.engine.nodes.base import BaseNode
+from app.engine.executors.base import BaseExecutor
 from app.engine.result import ExecutionResult
+from app.engine.workflow import WorkflowNode
 
 
-class ReturnNode(BaseNode):
-    """
-    Terminates workflow execution.
-    """
+class ReturnExecutor(BaseExecutor):
 
-    node_type: ClassVar[str] = "return"
+    node_type = "return"
 
     async def execute(
         self,
+        node: WorkflowNode,
         context: ExecutionContext,
     ) -> ExecutionResult:
 

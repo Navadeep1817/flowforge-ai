@@ -1,29 +1,26 @@
 """
-Transform node.
+Transform executor.
 """
 
 from __future__ import annotations
 
-from typing import ClassVar
-
 from app.engine.context import ExecutionContext
-from app.engine.nodes.base import BaseNode
+from app.engine.executors.base import BaseExecutor
 from app.engine.result import ExecutionResult
+from app.engine.workflow import WorkflowNode
 
 
-class TransformNode(BaseNode):
-    """
-    Copies configured values into workflow variables.
-    """
+class TransformExecutor(BaseExecutor):
 
-    node_type: ClassVar[str] = "transform"
+    node_type = "transform"
 
     async def execute(
         self,
+        node: WorkflowNode,
         context: ExecutionContext,
     ) -> ExecutionResult:
 
-        values = self.config.get("variables", {})
+        values = node.config.get("variables", {})
 
         for key, value in values.items():
             context.set_variable(key, value)
