@@ -9,7 +9,7 @@ from app.engine.executors.base import BaseExecutor
 from app.engine.result import ExecutionResult
 from app.engine.workflow import WorkflowNode
 from app.integrations.http_client import HttpClient
-
+from app.engine.mapping import MappingEngine
 
 class HttpExecutor(BaseExecutor):
 
@@ -17,7 +17,7 @@ class HttpExecutor(BaseExecutor):
 
     def __init__(self) -> None:
         self.client = HttpClient()
-
+        self.mapper = MappingEngine()
     async def execute(
         self,
         node: WorkflowNode,
@@ -29,9 +29,20 @@ class HttpExecutor(BaseExecutor):
         result = await self.client.request(
             method=config["method"],
             url=config["url"],
-            headers=config.get("headers"),
-            params=config.get("params"),
-            json=config.get("body"),
+            headers=self.mapper.resolve(
+    config.get("headers", {}),
+    context,
+),
+
+params=self.mapper.resolve(
+    config.get("params", {}),
+    context,
+),
+
+json=self.mapper.resolve(
+    config.get("body", {}),
+    context,
+)
         )
 
         return ExecutionResult(

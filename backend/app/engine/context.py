@@ -75,3 +75,34 @@ class ExecutionContext:
         message: str,
     ) -> None:
         self.errors.append(message)
+    def get_request_value(self, key: str):
+        """
+        Return a value from the incoming request using dot notation.
+        """
+        return self._get_nested_value(self.request, key)
+    def get_output_value(self, key: str):
+        """
+        Return a value from workflow outputs using dot notation.
+        """
+        return self._get_nested_value(self.outputs, key)
+    @staticmethod
+    def _get_nested_value(data: dict, path: str):
+        """
+        Resolve nested dictionary values.
+
+        Example:
+            outputs.http.json.name
+        """
+
+        current = data
+
+        for part in path.split("."):
+            if not isinstance(current, dict):
+                return None
+
+            current = current.get(part)
+
+            if current is None:
+                return None
+
+        return current
