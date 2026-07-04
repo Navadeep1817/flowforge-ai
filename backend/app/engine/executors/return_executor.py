@@ -11,6 +11,9 @@ from app.engine.workflow import WorkflowNode
 
 
 class ReturnExecutor(BaseExecutor):
+    """
+    Terminates workflow execution.
+    """
 
     node_type = "return"
 
@@ -22,6 +25,5 @@ class ReturnExecutor(BaseExecutor):
 
         return ExecutionResult(
             success=True,
-            outputs=context.outputs,
             terminate=True,
         ) 
