@@ -31,3 +31,6 @@ htmlcov/
 
 # Alembic cache
 *.db 
+
+# Python packaging
+*.egg-info/
