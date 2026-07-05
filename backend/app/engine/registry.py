@@ -10,6 +10,7 @@ from app.engine.executors.return_executor import ReturnExecutor
 from app.engine.executors.transform import TransformExecutor
 from app.engine.executors.validation import ValidationExecutor
 from app.engine.executors.condition import ConditionExecutor
+from app.engine.executors.parallel import ParallelExecutor
 
 class ExecutorRegistry:
     """
@@ -27,6 +28,7 @@ class ExecutorRegistry:
      self.register(HttpExecutor())
      self.register(ReturnExecutor())
      self.register(ConditionExecutor())
+     self.register(ParallelExecutor())
 
      print(self.available())
 

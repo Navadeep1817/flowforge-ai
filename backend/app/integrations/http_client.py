@@ -1,34 +1,26 @@
 """
-Reusable async HTTP client.
+Reusable HTTP client.
 """
 
 from __future__ import annotations
-
-from typing import Any
 
 import httpx
 
 
 class HttpClient:
-    """
-    Shared async HTTP client.
-    """
 
     def __init__(self) -> None:
-        self._client = httpx.AsyncClient(
-            timeout=30,
-            follow_redirects=True,
-        )
+        self._client = httpx.AsyncClient(timeout=30)
 
     async def request(
         self,
+        *,
         method: str,
         url: str,
-        *,
-        headers: dict[str, str] | None = None,
-        params: dict[str, Any] | None = None,
-        json: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+        headers: dict | None = None,
+        params: dict | None = None,
+        json: dict | None = None,
+    ) -> httpx.Response:
 
         response = await self._client.request(
             method=method,
@@ -40,7 +32,7 @@ class HttpClient:
 
         response.raise_for_status()
 
-        return response.json()
+        return response
 
     async def close(self) -> None:
         await self._client.aclose()
