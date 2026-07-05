@@ -26,10 +26,12 @@ async def test_simple_workflow():
                 },
                 next_nodes=["return"],
             ),
-            "return": WorkflowNode(
-                id="return",
-                type="return",
-            ),
+           "return": WorkflowNode(
+    id="return",
+    type="return",
+    config={},
+    next_nodes=[],
+),
         },
     )
 

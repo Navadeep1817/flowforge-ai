@@ -75,18 +75,61 @@ class ExecutionContext:
         message: str,
     ) -> None:
         self.errors.append(message)
-    def get_request_value(self, key: str):
+
+    def get_request_value(
+        self,
+        key: str,
+    ):
         """
         Return a value from the incoming request using dot notation.
         """
         return self._get_nested_value(self.request, key)
-    def get_output_value(self, key: str):
+
+    def get_output_value(
+        self,
+        key: str,
+    ):
         """
         Return a value from workflow outputs using dot notation.
         """
         return self._get_nested_value(self.outputs, key)
+
+    def lookup(
+        self,
+        path: str,
+    ):
+        """
+        Lookup values using dot notation.
+
+        Examples:
+            request.name
+            transform.message
+            http.json.id
+        """
+
+        parts = path.split(".")
+
+        current = {
+            "request": self.request,
+            **self.outputs,
+        }
+
+        for part in parts:
+            if isinstance(current, dict):
+                current = current.get(part)
+            else:
+                return None
+
+            if current is None:
+                return None
+
+        return current
+
     @staticmethod
-    def _get_nested_value(data: dict, path: str):
+    def _get_nested_value(
+        data: dict,
+        path: str,
+    ):
         """
         Resolve nested dictionary values.
 

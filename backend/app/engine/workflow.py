@@ -6,17 +6,25 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
-from dataclasses import dataclass
-from typing import Any
 
 
 @dataclass(slots=True)
-@dataclass
 class WorkflowNode:
+    """
+    Represents a single node in a workflow.
+    """
+
     id: str
     type: str
-    config: dict
-    next_nodes: Any
+
+    config: dict[str, Any] = field(default_factory=dict)
+
+    # Supports:
+    # ["next"]                     -> Sequential
+    # {"true":"a","false":"b"}     -> Conditional
+    next_nodes: list[str] | dict[str, str] = field(default_factory=list)
+
+
 @dataclass(slots=True)
 class Workflow:
     """
@@ -29,4 +37,4 @@ class Workflow:
 
     start_node: str
 
-    nodes: dict[str, WorkflowNode]
+    nodes: dict[str, WorkflowNode] = field(default_factory=dict)

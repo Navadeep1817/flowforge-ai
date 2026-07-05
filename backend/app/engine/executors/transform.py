@@ -8,6 +8,7 @@ from app.engine.context import ExecutionContext
 from app.engine.executors.base import BaseExecutor
 from app.engine.result import ExecutionResult
 from app.engine.workflow import WorkflowNode
+from app.engine.template_resolver import TemplateResolver
 
 
 class TransformExecutor(BaseExecutor):
@@ -20,7 +21,12 @@ class TransformExecutor(BaseExecutor):
         context: ExecutionContext,
     ) -> ExecutionResult:
 
-        values = node.config.get("variables", {})
+        resolver = TemplateResolver()
+
+        values = resolver.resolve(
+            node.config.get("variables", {}),
+            context,
+        )
 
         for key, value in values.items():
             context.set_variable(key, value)
@@ -28,4 +34,4 @@ class TransformExecutor(BaseExecutor):
         return ExecutionResult(
             success=True,
             outputs=values,
-        ) 
+        )
