@@ -11,6 +11,7 @@ from app.engine.executors.transform import TransformExecutor
 from app.engine.executors.validation import ValidationExecutor
 from app.engine.executors.condition import ConditionExecutor
 from app.engine.executors.parallel import ParallelExecutor
+from app.engine.executors.merge import MergeExecutor
 
 class ExecutorRegistry:
     """
@@ -29,7 +30,7 @@ class ExecutorRegistry:
      self.register(ReturnExecutor())
      self.register(ConditionExecutor())
      self.register(ParallelExecutor())
-
+     self.register(MergeExecutor())
      print(self.available())
 
     def register(
